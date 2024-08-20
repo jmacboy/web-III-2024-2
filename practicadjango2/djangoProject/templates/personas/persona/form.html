@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Formulario de Personas</h1>
+<form method="post" action="{% url "persona_store" %}">
+    {% csrf_token %}
+    <label for="nombre">Nombre</label>
+    <input type="text" name="nombre" id="nombre">
+    <br>
+    <label for="apellidos">Apellido</label>
+    <input type="text" name="apellidos" id="apellidos">
+    <br>
+    <label for="ciudad">Ciudad</label>
+    <input type="text" name="ciudad" id="ciudad">
+    <br>
+    <label for="edad">Edad</label>
+    <input type="number" name="edad" id="edad">
+    <br>
+    <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+    <input type="date" name="fecha_nacimiento" id="fecha_nacimiento">
+    <br>
+
+    <input type="submit" value="Guardar"/>
+
+</form>
+</body>
+</html>
