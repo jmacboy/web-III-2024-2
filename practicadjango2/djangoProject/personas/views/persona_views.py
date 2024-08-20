@@ -1,12 +1,6 @@
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from personas.models import Persona
-
-
-# Create your views here.
-def hola_mundo(request):
-    return HttpResponse('Hola Mundo')
 
 
 def persona_list(request):
@@ -34,4 +28,28 @@ def persona_store(request):
         fecha_nacimiento=fecha_nacimiento
     )
     persona.save()
+    return redirect('personas_list')
+
+
+def persona_edit(request, id):
+    persona = Persona.objects.get(id=id)
+    return render(request, 'personas/persona/form.html', {
+        'persona': persona
+    })
+
+
+def persona_update(request, id):
+    persona = Persona.objects.get(id=id)
+    persona.nombre = request.POST.get('nombre')
+    persona.apellidos = request.POST.get('apellidos')
+    persona.edad = request.POST.get('edad')
+    persona.ciudad = request.POST.get('ciudad')
+    persona.fecha_nacimiento = request.POST.get('fecha_nacimiento')
+    persona.save()
+    return redirect('personas_list')
+
+
+def persona_delete(request, id):
+    persona = Persona.objects.get(id=id)
+    persona.delete()
     return redirect('personas_list')
