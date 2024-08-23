@@ -1,32 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<h1>Lista de Personas</h1>
-<table>
-<thead>
-    <tr>
-        <th>Nombre</th>
-        <th>Apellidos</th>
-        <th>Edad</th>
-        <th>Ciudad</th>
-        <th>Fecha de Nacimiento</th>
-    </tr>
-</thead>
-    <tbody>
-    {% for persona in personas %}
-    <tr>
-        <td>{{ persona.nombre }}</td>
-        <td>{{ persona.apellidos }}</td>
-        <td>{{ persona.edad }}</td>
-        <td>{{ persona.ciudad }}</td>
-        <td>{{ persona.fecha_nacimiento }}</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <h1>Lista de Personas</h1>
+                        </div>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Apellidos</th>
+                                <th>Edad</th>
+                                <th>Ciudad</th>
+                                <th>Fecha de Nacimiento</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for persona in personas %}
+                                <tr>
+                                    <td>{{ persona.nombre }}</td>
+                                    <td>{{ persona.apellidos }}</td>
+                                    <td>{{ persona.edad }}</td>
+                                    <td>{{ persona.ciudad }}</td>
+                                    <td>{{ persona.fecha_nacimiento|date:"d/m/Y" }}</td>
+                                    <td>
+                                        <a class="btn btn-primary" href="{% url 'persona_edit' persona.id %}">Editar</a>
+                                    </td>
+                                    <td>
+                                        <form method="post" action="{% url "persona_delete" persona.id %}"
+                                              onsubmit="return confirm('Está seguro que desea eliminar?')">
+                                            {% csrf_token %}
+                                            <input class="btn btn-danger" type="submit" value="Eliminar"/>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
