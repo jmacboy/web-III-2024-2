@@ -27,3 +27,5 @@ class Mascota(models.Model):
         on_delete=models.CASCADE,
         related_name="mascotas"
     )
+    def __str__(self):
+        return self.nombre

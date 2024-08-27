@@ -17,4 +17,9 @@ urlpatterns = [
     path("mascotas/create", views.mascota_store, name="mascota_store"),
     path("mascotas/edit/<int:id>", views.mascota_update, name="mascota_edit"),
     path("mascotas/delete/<int:id>", views.mascota_delete, name="mascota_delete"),
+
+    path("contactos/", views.ContactoListView.as_view(), name="contactos_list"),
+    path("contactos/create", views.ContactoCreateView.as_view(), name="contacto_create"),
+    path("contactos/edit/<int:pk>", views.ContactoUpdateView.as_view(), name="contacto_edit"),
+    path("contactos/delete/<int:pk>", views.ContactoDeleteView.as_view(), name="contacto_delete"),
 ]

@@ -1,31 +1,20 @@
 from django import forms
 
+from personas.forms.form_utils import select_bootstrap_field, input_bootstrap_field
 from personas.models import Mascota, Persona
 
 
 class MascotaForm(forms.ModelForm):
     nombre = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                'class': 'form-control'
-            }
-        )
+        widget=input_bootstrap_field
     )
     tipo = forms.ChoiceField(
         choices=Mascota.TIPO_CHOICES,
-        widget=forms.Select(
-            attrs={
-                'class': 'form-select'
-            }
-        )
+        widget=select_bootstrap_field
     )
     persona = forms.ModelChoiceField(
         queryset=Persona.objects.all(),
-        widget=forms.Select(
-            attrs={
-                'class': 'form-select'
-            }
-        )
+        widget=select_bootstrap_field
     )
 
     class Meta:
