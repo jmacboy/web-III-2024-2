@@ -4,6 +4,8 @@ from personas import views
 
 urlpatterns = [
     path("hola", views.hola_mundo, name="hola"),
+    path("", views.home, name="home"),
+
     path("personas/", views.persona_list, name="personas_list"),
     path("personas/create", views.persona_create, name="persona_create"),
     path("personas/store", views.persona_store, name="persona_store"),
