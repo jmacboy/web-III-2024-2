@@ -10,3 +10,8 @@ input_bootstrap_field = forms.TextInput(
         'class': 'form-control'
     }
 )
+password_bootstrap_field = forms.PasswordInput(
+    attrs={
+        'class': 'form-control'
+    }
+)

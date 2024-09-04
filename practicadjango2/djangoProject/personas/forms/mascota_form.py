@@ -17,6 +17,10 @@ class MascotaForm(forms.ModelForm):
         widget=select_bootstrap_field
     )
 
+    foto_perfil = forms.ImageField(
+        required=False
+    )
+
     class Meta:
         model = Mascota
-        fields = ('nombre', 'tipo', 'persona')
+        fields = ('nombre', 'tipo', 'persona', 'foto_perfil')

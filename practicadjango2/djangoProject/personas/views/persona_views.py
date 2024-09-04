@@ -51,5 +51,20 @@ def persona_update(request, id):
 
 def persona_delete(request, id):
     persona = Persona.objects.get(id=id)
+    if persona.profile_picture:
+        persona.profile_picture.delete()
     persona.delete()
     return redirect('personas_list')
+
+
+def persona_picture(request, id):
+    persona = Persona.objects.get(id=id)
+
+    if request.method == 'POST':
+        if persona.profile_picture:
+            persona.profile_picture.delete()
+
+        persona.profile_picture = request.FILES.get('profile_picture')
+        persona.save()
+        return redirect('personas_list')
+    return render(request, 'personas/persona/profile-picture.html', {})

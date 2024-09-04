@@ -12,6 +12,7 @@ urlpatterns = [
     path("personas/edit/<int:id>", views.persona_edit, name="persona_edit"),
     path("personas/update/<int:id>", views.persona_update, name="persona_update"),
     path("personas/delete/<int:id>", views.persona_delete, name="persona_delete"),
+    path("personas/picture/<int:id>", views.persona_picture, name="persona_picture"),
 
     path("mascotas/", views.mascota_list, name="mascotas_list"),
     path("mascotas/create", views.mascota_store, name="mascota_store"),
@@ -22,4 +23,7 @@ urlpatterns = [
     path("contactos/create", views.ContactoCreateView.as_view(), name="contacto_create"),
     path("contactos/edit/<int:pk>", views.ContactoUpdateView.as_view(), name="contacto_edit"),
     path("contactos/delete/<int:pk>", views.ContactoDeleteView.as_view(), name="contacto_delete"),
+
+    path("login", views.login_view, name="login"),
+    path("logout", views.logout_view, name="logout"),
 ]

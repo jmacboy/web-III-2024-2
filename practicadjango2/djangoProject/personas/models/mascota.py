@@ -27,5 +27,10 @@ class Mascota(models.Model):
         on_delete=models.CASCADE,
         related_name="mascotas"
     )
+    foto_perfil = models.ImageField(
+        upload_to='static/mascotas',
+        null=True,
+        blank=True
+    )
     def __str__(self):
         return self.nombre

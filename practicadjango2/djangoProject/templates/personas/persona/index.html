@@ -11,6 +11,7 @@
                         <table class="table">
                             <thead>
                             <tr>
+                                <th></th>
                                 <th>Nombre</th>
                                 <th>Apellidos</th>
                                 <th>Edad</th>
@@ -18,16 +19,23 @@
                                 <th>Fecha de Nacimiento</th>
                                 <th></th>
                                 <th></th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
                             {% for persona in personas %}
                                 <tr>
+                                    <td><img alt="profile" style="width: 100px;"
+                                             src="/{{ persona.profile_picture }}"/></td>
                                     <td>{{ persona.nombre }}</td>
                                     <td>{{ persona.apellidos }}</td>
                                     <td>{{ persona.edad }}</td>
                                     <td>{{ persona.ciudad }}</td>
                                     <td>{{ persona.fecha_nacimiento|date:"d/m/Y" }}</td>
+                                    <td>
+                                        <a class="btn btn-success" href="{% url 'persona_picture' persona.id %}">Foto de
+                                            Perfil</a>
+                                    </td>
                                     <td>
                                         <a class="btn btn-primary" href="{% url 'persona_edit' persona.id %}">Editar</a>
                                     </td>

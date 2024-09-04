@@ -1,3 +1,4 @@
+from django.core.files.storage import default_storage
 from django.shortcuts import render, redirect
 
 from personas.forms import MascotaForm
@@ -13,9 +14,10 @@ def mascota_list(request):
 
 def mascota_store(request):
     if request.method == 'POST':
-        form = MascotaForm(request.POST)
+        form = MascotaForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+
             return redirect('mascotas_list')
     else:
         form = MascotaForm()
@@ -26,20 +28,31 @@ def mascota_store(request):
 
 def mascota_update(request, id):
     mascota = Mascota.objects.get(id=id)
+    imagen_anterior = mascota.foto_perfil
     if request.method == 'POST':
-        form = MascotaForm(request.POST, instance=mascota)
+        form = MascotaForm(request.POST, request.FILES, instance=mascota)
+
         if form.is_valid():
-            form.save()
-            return redirect('mascotas_list')
+            nueva_imagen = form.cleaned_data.get('foto_perfil')
+            if imagen_anterior and nueva_imagen != None and imagen_anterior != nueva_imagen:
+                if default_storage.exists(imagen_anterior.path):
+                    default_storage.delete(imagen_anterior.path)
+
+        form.save()
+        return redirect('mascotas_list')
+
     else:
         form = MascotaForm(instance=mascota)
 
-    return render(request, 'personas/mascota/form.html', {
-        'form': form
-    })
+        return render(request, 'personas/mascota/form.html', {
+            'form': form
+        })
 
 
 def mascota_delete(request, id):
     mascota = Mascota.objects.get(id=id)
+    if mascota.foto_perfil:
+        if default_storage.exists(mascota.foto_perfil.path):
+            default_storage.delete(mascota.foto_perfil.path)
     mascota.delete()
     return redirect('mascotas_list')
