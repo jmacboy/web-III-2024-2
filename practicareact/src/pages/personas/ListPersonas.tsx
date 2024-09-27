@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Persona } from "../../models/Persona";
 import { PersonaService } from "../../services/PersonasService";
+import { NavMenu } from "../../components/NavMenu";
 
 export const ListPersonas = () => {
     const [personas, setPersonas] = useState<Persona[]>([]);
@@ -13,6 +14,8 @@ export const ListPersonas = () => {
 
     return (
         <div>
+            <NavMenu />
+
             <h1>Listado de Personas</h1>
             <table className="w-full min-w-max table-auto text-left">
                 <thead>

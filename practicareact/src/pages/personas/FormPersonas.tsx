@@ -1,8 +1,11 @@
 import { InputText } from "../../components/InputText";
+import { NavMenu } from "../../components/NavMenu";
 
 export const FormPersonas = () => {
     return (
         <div>
+            <NavMenu />
+
             <div>
                 <div className="max-w-sm rounded overflow-hidden shadow-lg">
                     <div className="px-6 py-4">
