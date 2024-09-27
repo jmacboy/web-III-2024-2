@@ -1,15 +1,12 @@
 import { Button, Menu, MenuHandler, MenuItem, MenuList, Navbar } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
-import { logoutUser } from "../slices/userSlice";
+import { useAuth } from "../hooks/useAuth";
 
 export const NavMenu = () => {
     const navigate = useNavigate();
-    const dispatch = useAppDispatch();
-    const userEmail = useAppSelector(state => state.user.email);
+    const { logout, userEmail } = useAuth({ redirectWithoutToken: false });
     const onLogoutClick = () => {
-        dispatch(logoutUser());
-        navigate("/login");
+        logout();
     }
     return (
         <Navbar className="mx-auto max-w-screen-xl px-4 py-2 lg:px-8 lg:py-4">

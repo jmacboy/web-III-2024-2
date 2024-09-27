@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { Persona } from "../../models/Persona";
 import { PersonaService } from "../../services/PersonasService";
 import { NavMenu } from "../../components/NavMenu";
+import { useAuth } from "../../hooks/useAuth";
 
 export const ListPersonas = () => {
     const [personas, setPersonas] = useState<Persona[]>([]);
+    useAuth({ redirectWithoutToken: true });
     useEffect(() => {
         new PersonaService().getPersonaList()
             .then((response) => {

@@ -3,13 +3,22 @@ import { NavMenu } from "../components/NavMenu";
 import { useAppDispatch } from "../hooks/reduxHooks";
 import { loginUser } from "../slices/userSlice";
 import { useState } from "react";
+import { UserService } from "../services/UserService";
+import { setLocalStorage } from "../utils/LocalStorageUtils";
+import { TOKEN_KEY } from "../utils/CONSTANTS";
+import { useNavigate } from "react-router-dom";
 
 export const LoginPage = () => {
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const dispatch = useAppDispatch();
     const onLoginClick = () => {
-        dispatch(loginUser(email));
+        new UserService().login(email, password).then((response) => {
+            dispatch(loginUser(email));
+            setLocalStorage(TOKEN_KEY, response.token);
+            navigate('/personas');
+        });
     }
     return (
         <div>
