@@ -16,16 +16,16 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserViewSet(viewsets.ViewSet):
-    @action(detail=False, methods=['post'], url_path='login')
-    def login(self, request):
-        email = request.data.get('email')
-        password = request.data.get('password')
-        user = authenticate(username=email, password=password)
-        if user is None:
-            return Response({'error': 'Unauthenticated'}, status=status.HTTP_401_UNAUTHORIZED)
-        token, _ = Token.objects.get_or_create(user=user)
-
-        return Response({'token': token.key})
+    # @action(detail=False, methods=['post'], url_path='login')
+    # def login(self, request):
+    #     email = request.data.get('email')
+    #     password = request.data.get('password')
+    #     user = authenticate(username=email, password=password)
+    #     if user is None:
+    #         return Response({'error': 'Unauthenticated'}, status=status.HTTP_401_UNAUTHORIZED)
+    #     token, _ = Token.objects.get_or_create(user=user)
+    #
+    #     return Response({'token': token.key})
 
     @action(detail=False, methods=['post'], url_path='register')
     def register(self, request):

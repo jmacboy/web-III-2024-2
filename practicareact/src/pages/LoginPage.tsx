@@ -3,22 +3,27 @@ import { NavMenu } from "../components/NavMenu";
 import { useAppDispatch } from "../hooks/reduxHooks";
 import { loginUser } from "../slices/userSlice";
 import { useState } from "react";
-import { UserService } from "../services/UserService";
 import { setLocalStorage } from "../utils/LocalStorageUtils";
 import { TOKEN_KEY } from "../utils/CONSTANTS";
 import { useNavigate } from "react-router-dom";
-
+import { encode as base64_encode } from "base-64";
 export const LoginPage = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const dispatch = useAppDispatch();
     const onLoginClick = () => {
-        new UserService().login(email, password).then((response) => {
-            dispatch(loginUser(email));
-            setLocalStorage(TOKEN_KEY, response.token);
-            navigate('/personas');
-        });
+        // new UserService().login(email, password).then((response) => {
+        //     dispatch(loginUser(email));
+        //     setLocalStorage(TOKEN_KEY, response.token);
+        //     navigate('/personas');
+        // });
+        const base64Code = base64_encode(`${email}:${password}`);
+        setLocalStorage(TOKEN_KEY, base64Code);
+        dispatch(loginUser(email));
+        navigate('/personas');
+
+
     }
     return (
         <div>
