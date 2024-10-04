@@ -5,7 +5,7 @@ import { loginUser } from "../slices/userSlice";
 import { useState } from "react";
 import { UserService } from "../services/UserService";
 import { setLocalStorage } from "../utils/LocalStorageUtils";
-import { TOKEN_KEY } from "../utils/CONSTANTS";
+import { TOKEN_KEY, REFRESH_KEY } from "../utils/CONSTANTS";
 import { useNavigate } from "react-router-dom";
 
 export const LoginPage = () => {
@@ -16,7 +16,8 @@ export const LoginPage = () => {
     const onLoginClick = () => {
         new UserService().login(email, password).then((response) => {
             dispatch(loginUser(email));
-            setLocalStorage(TOKEN_KEY, response.token);
+            setLocalStorage(TOKEN_KEY, response.access);
+            setLocalStorage(REFRESH_KEY, response.refresh);
             navigate('/personas');
         });
     }
