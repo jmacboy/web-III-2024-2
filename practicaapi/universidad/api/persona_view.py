@@ -1,5 +1,6 @@
 from rest_framework import viewsets, serializers
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_api_key.permissions import HasAPIKey
 
 from universidad.api import MateriaSimpleSerializer
 from universidad.models import Persona, Materia
@@ -24,4 +25,4 @@ class PersonaSerializer(serializers.ModelSerializer):
 class PersonaViewSet(viewsets.ModelViewSet):
     serializer_class = PersonaSerializer
     queryset = Persona.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [HasAPIKey | IsAuthenticated]
