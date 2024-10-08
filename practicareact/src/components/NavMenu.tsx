@@ -15,7 +15,20 @@ export const NavMenu = () => {
                     <Button onClick={onLogoutClick} variant="text" size="sm" className="lg:inline-block">
                         <span>Cerrar sesión</span>
                     </Button>
+                    <Menu>
+                        <MenuHandler>
+                            <Button>Personas</Button>
+                        </MenuHandler>
+                        <MenuList>
+                            <MenuItem onClick={() => {
+                                navigate("/personas");
+                            }}>Lista de Personas</MenuItem>
+                            <MenuItem onClick={() => {
 
+                                navigate("/personas/create");
+                            }}>Crear Persona</MenuItem>
+                        </MenuList>
+                    </Menu>
                 </div>) : (<div>
                     <Button onClick={() => {
                         navigate("/login");
@@ -23,20 +36,7 @@ export const NavMenu = () => {
                         <span>Log In</span>
                     </Button>
                 </div>)}
-                <Menu>
-                    <MenuHandler>
-                        <Button>Personas</Button>
-                    </MenuHandler>
-                    <MenuList>
-                        <MenuItem onClick={() => {
-                            navigate("/personas");
-                        }}>Lista de Personas</MenuItem>
-                        <MenuItem onClick={() => {
 
-                            navigate("/personas/create");
-                        }}>Crear Persona</MenuItem>
-                    </MenuList>
-                </Menu>
                 <Menu>
                     <MenuHandler>
                         <Button>Materias</Button>

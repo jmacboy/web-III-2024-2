@@ -16,3 +16,6 @@ export const getLocalStorage = (key: string, isJson: boolean = false) => {
         return localStorage.getItem(key);
     }
 }
+export const removeLocalStorage = (key: string) => {
+    localStorage.removeItem(key);
+}

@@ -1,4 +1,6 @@
 import axios, { InternalAxiosRequestConfig } from 'axios';
+import { getLocalStorage, removeLocalStorage } from '../utils/LocalStorageUtils';
+import { REFRESH_KEY, TOKEN_KEY } from '../utils/CONSTANTS';
 
 const apiClient = axios.create({
     baseURL: 'http://localhost:8000/api',
@@ -23,12 +25,19 @@ apiClient.interceptors.response.use(
         console.log('error', error);
         if (error.response?.status === 401) {
             try {
+                const refreshToken = getLocalStorage(REFRESH_KEY);
+                if (!refreshToken) {
+                    window.location.href = '/login';
+                    return Promise.reject(error);
+                }
                 const response = await axios.post('http://127.0.0.1:8000/api/token/refresh/', {
-                    refresh: localStorage.getItem('refresh'),
+                    refresh: getLocalStorage(REFRESH_KEY),
                 })
                 localStorage.setItem('token', response.data.access);
             } catch (authError) {
                 if (window.location.pathname !== '/login') {
+                    removeLocalStorage(TOKEN_KEY);
+                    removeLocalStorage(REFRESH_KEY);
                     window.location.href = '/login';
                 }
                 console.log("auth error", authError)
