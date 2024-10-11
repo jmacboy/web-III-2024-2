@@ -7,6 +7,8 @@ export class UserService {
             axios.post('http://localhost:8000/api/token/', {
                 username: email,
                 password: password
+            }, {
+                withCredentials: true
             }).then((response) => {
                 resolve(response.data);
             }).catch((error) => {

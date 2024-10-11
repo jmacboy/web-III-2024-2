@@ -14,10 +14,8 @@ export const LoginPage = () => {
     const [password, setPassword] = useState('');
     const dispatch = useAppDispatch();
     const onLoginClick = () => {
-        new UserService().login(email, password).then((response) => {
+        new UserService().login(email, password).then(() => {
             dispatch(loginUser(email));
-            setLocalStorage(TOKEN_KEY, response.access);
-            setLocalStorage(REFRESH_KEY, response.refresh);
             navigate('/personas');
         });
     }
