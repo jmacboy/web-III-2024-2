@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
@@ -50,4 +51,13 @@ class CookieTokenRefreshView(TokenRefreshView):
         access_token = serializer.validated_data['access']
         response = Response({'message': str('Token Refreshed Successfully')}, status=status.HTTP_200_OK)
         set_cookie(response, 'access', str(access_token), 1 * 60)
+        return response
+
+
+class CookieTokenLogout(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request, *args, **kwargs):
+        response = Response({'message': str('Cookie removed successfully')}, status=status.HTTP_200_OK)
+        set_cookie(response, 'access', '', 1)
+        set_cookie(response, 'refresh', '', 1)
         return response

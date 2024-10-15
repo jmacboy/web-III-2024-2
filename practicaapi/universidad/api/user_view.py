@@ -2,7 +2,8 @@ from django.contrib.auth import authenticate
 from rest_framework import viewsets, status, serializers
 from rest_framework.authtoken.admin import User
 from rest_framework.authtoken.models import Token
-from rest_framework.decorators import action
+from rest_framework.decorators import action, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 
@@ -37,3 +38,10 @@ class UserViewSet(viewsets.ViewSet):
         user.save()
         serializer = UserSerializer(user)
         return Response(serializer.data)
+
+    @action(detail=False, methods=['get'], url_path='me', permission_classes=[IsAuthenticated])
+    def me(self, request):
+        user = request.user
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+

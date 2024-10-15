@@ -13,19 +13,21 @@ type Inputs = {
 };
 
 export const LoginPage = () => {
-    const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
+    const { register, handleSubmit, formState: { errors } } = useForm<Inputs>();
     const navigate = useNavigate();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const dispatch = useAppDispatch();
-    const onLoginClick = () => {
-
-    }
+    const [errorText, setErrorText] = useState('')
     const onSubmit: SubmitHandler<Inputs> = data => {
         console.log(data);
-        new UserService().login(email, password).then(() => {
-            dispatch(loginUser(email));
+        setErrorText('')
+        new UserService().login(data.emailRequired, data.passwordRequired).then(() => {
+            dispatch(loginUser(data.emailRequired));
             navigate('/personas');
+        }).catch((error) => {
+            console.log(error);
+            if (error.response.status === 401) {
+                setErrorText("Error, usuario o contraseña incorrectas")
+            }
         });
     }
     return (
@@ -35,7 +37,8 @@ export const LoginPage = () => {
                 <Card color="transparent" shadow={false}>
 
                     <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96" onSubmit={handleSubmit(onSubmit)}>
-                        <div className="mb-1 flex flex-col gap-6">
+
+                        <div className="mb-1 flex flex-col gap-3">
                             <Typography variant="h6" color="blue-gray" className="-mb-3">
                                 Email
                             </Typography>
@@ -47,9 +50,9 @@ export const LoginPage = () => {
                                     className: "before:content-none after:content-none",
                                 }}
                                 aria-invalid={errors.emailRequired ? "true" : "false"}
-                                {...register("emailRequired", { required: true })}
+                                {...register("emailRequired", { required: true, pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i })}
                             />
-                            {errors.emailRequired && <span className="text-red-600">El email es requerido</span>}
+                            {errors.emailRequired && <div className="text-red-600">Ingrese un email válido</div>}
                             <Typography variant="h6" color="blue-gray" className="-mb-3">
                                 Password
                             </Typography>
@@ -65,6 +68,10 @@ export const LoginPage = () => {
                                 {...register("passwordRequired", { required: true })}
                             />
                             {errors.passwordRequired && <span className="text-red-600">La contraseña es requerida</span>}
+                            {errorText && <div
+                                className="-mb-3 text-red-600 text-center">
+                                {errorText}
+                            </div>}
                             <Button type="submit">
                                 Iniciar sesión
                             </Button>

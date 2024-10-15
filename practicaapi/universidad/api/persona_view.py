@@ -12,7 +12,8 @@ class PersonaSerializer(serializers.ModelSerializer):
         write_only=True,
         queryset=Materia.objects.all(),
         source='materias_inscritas',
-        many=True
+        many=True,
+        required=False
     )
 
     class Meta:

@@ -19,10 +19,12 @@ from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from universidad.auth import CookieTokenObtainPairView, CookieTokenRefreshView
+from universidad.auth.cookie_auth import CookieTokenLogout
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('universidad.urls')),
     path('api/token/', CookieTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', CookieTokenRefreshView.as_view(), name='token_refresh'),
+    path('api/logout/', CookieTokenLogout.as_view(), name='logout'),
 ]

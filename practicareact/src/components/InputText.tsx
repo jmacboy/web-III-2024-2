@@ -1,11 +1,13 @@
-type Props = {
-    id: string;
-    type: string;
-    value?: string;
-    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}
-export const InputText = ({ id, type, value, onChange }: Props) => {
+import { Input } from "@material-tailwind/react";
+
+
+export const InputText = (props: any) => {
     return (
-        <input id={id} type={type} value={value} onChange={onChange} required className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-100 sm:text-sm sm:leading-6" />
+        <Input className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+            labelProps={{
+                className: "before:content-none after:content-none",
+            }}
+            size="lg"
+            {...props} />
     );
 }

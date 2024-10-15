@@ -3,17 +3,37 @@ import { Persona } from "../../models/Persona";
 import { PersonaService } from "../../services/PersonasService";
 import { NavMenu } from "../../components/NavMenu";
 import { useAuth } from "../../hooks/useAuth";
+import moment from "moment";
+import { Button } from "@material-tailwind/react";
+import { useNavigate } from "react-router-dom";
 
 export const ListPersonas = () => {
+    const navigate = useNavigate();
     const [personas, setPersonas] = useState<Persona[]>([]);
-    useAuth({ redirectWithoutToken: true });
+    const { userEmail } = useAuth({ redirectWithoutToken: true });
     useEffect(() => {
+        if (!userEmail) return;
+        getPersonaList();
+    }, [userEmail])
+    const getPersonaList = () => {
         new PersonaService().getPersonaList()
             .then((response) => {
                 setPersonas(response);
             });
-    }, [])
-
+    }
+    const onEditarclick = (persona: Persona) => {
+        navigate('/personas/' + persona.id)
+    }
+    const onEliminarClick = (persona: Persona) => {
+        const confirmation = confirm('Está seguro que desea eliminar?');
+        if (!confirmation) {
+            return;
+        }
+        new PersonaService().deletePersona(persona.id?.toString() ?? "0")
+            .then(() => {
+                getPersonaList();
+            });
+    }
     return (
         <div>
             <NavMenu />
@@ -40,9 +60,13 @@ export const ListPersonas = () => {
                             <td>{persona.apellidos}</td>
                             <td>{persona.edad}</td>
                             <td>{persona.ciudad}</td>
-                            <td>{persona.fecha_nacimiento.toString()}</td>
-                            <td></td>
-                            <td></td>
+                            <td>{moment(persona.fecha_nacimiento).format('DD/MM/YYYY')}</td>
+                            <td><Button onClick={() => {
+                                onEditarclick(persona)
+                            }}>Editar</Button></td>
+                            <td><Button onClick={() => {
+                                onEliminarClick(persona)
+                            }}>Eliminar</Button></td>
                         </tr>
                     ))}
                 </tbody>
