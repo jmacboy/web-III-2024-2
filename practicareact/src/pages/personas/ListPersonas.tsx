@@ -6,19 +6,26 @@ import { useAuth } from "../../hooks/useAuth";
 import moment from "moment";
 import { Button } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
+import { Paginador } from "../../components/Paginador";
 
 export const ListPersonas = () => {
     const navigate = useNavigate();
     const [personas, setPersonas] = useState<Persona[]>([]);
-    const { userEmail } = useAuth({ redirectWithoutToken: true });
+    // const { userEmail } = useAuth({ redirectWithoutToken: true });
+    const [cantPaginas, setCantPaginas] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
     useEffect(() => {
-        if (!userEmail) return;
+        if (!currentPage) {
+            return;
+        }
         getPersonaList();
-    }, [userEmail])
+    }, [currentPage])
+
     const getPersonaList = () => {
-        new PersonaService().getPersonaList()
+        new PersonaService().getPersonaList(currentPage)
             .then((response) => {
-                setPersonas(response);
+                setPersonas(response.results);
+                setCantPaginas(Math.ceil(response.count / 5));
             });
     }
     const onEditarclick = (persona: Persona) => {
@@ -71,6 +78,7 @@ export const ListPersonas = () => {
                     ))}
                 </tbody>
             </table>
+            <Paginador page={currentPage} setPage={setCurrentPage} cantPaginas={cantPaginas} />
         </div>
     );
 }

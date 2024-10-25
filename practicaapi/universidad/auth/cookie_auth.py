@@ -29,7 +29,7 @@ class CookieTokenObtainPairView(APIView):
 
         tokens = RefreshToken.for_user(user)
         response = Response({'message': str('Token Created Successfully')}, status=status.HTTP_200_OK)
-        set_cookie(response, 'access', str(tokens.access_token), 1 * 60)
+        set_cookie(response, 'access', str(tokens.access_token), 60 * 60)
         set_cookie(response, 'refresh', str(tokens), 24 * 60 * 60)
         return response
 
@@ -50,7 +50,7 @@ class CookieTokenRefreshView(TokenRefreshView):
 
         access_token = serializer.validated_data['access']
         response = Response({'message': str('Token Refreshed Successfully')}, status=status.HTTP_200_OK)
-        set_cookie(response, 'access', str(access_token), 1 * 60)
+        set_cookie(response, 'access', str(access_token), 60 * 60)
         return response
 
 

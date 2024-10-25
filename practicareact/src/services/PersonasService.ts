@@ -1,10 +1,11 @@
 import { Persona } from "../models/Persona";
+import { PersonaPage } from "../models/PersonaPage";
 import apiClient from "./interceptor";
 
 export class PersonaService {
-    getPersonaList() {
-        return new Promise<Persona[]>((resolve, reject) => {
-            apiClient.get('/personas/')
+    getPersonaList(page: number) {
+        return new Promise<PersonaPage>((resolve, reject) => {
+            apiClient.get('/personas/?page=' + page)
                 .then((response) => {
                     resolve(response.data);
                 }).catch((error) => {

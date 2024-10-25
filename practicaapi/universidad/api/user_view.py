@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import Group
 from rest_framework import viewsets, status, serializers
 from rest_framework.authtoken.admin import User
 from rest_framework.authtoken.models import Token
@@ -36,6 +37,10 @@ class UserViewSet(viewsets.ViewSet):
         password = validated_data.validated_data.get('password')
         user = User.objects.create_user(username=email, email=email, password=password)
         user.save()
+
+        student_group = Group.objects.get(name='Students')
+        user.groups.add(student_group)
+
         serializer = UserSerializer(user)
         return Response(serializer.data)
 
