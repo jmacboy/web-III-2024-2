@@ -22,7 +22,9 @@ namespace PracticaMVC.Controllers
         // GET: Mascotas
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Mascota.ToListAsync());
+            return View(await _context.Mascota
+                .Include(m => m.Persona)
+                .ToListAsync());
         }
 
         // GET: Mascotas/Details/5
@@ -46,6 +48,8 @@ namespace PracticaMVC.Controllers
         // GET: Mascotas/Create
         public IActionResult Create()
         {
+            ViewData["PersonaID"] = new SelectList(_context.Persona, "PersonaID", "Nombres");
+            
             return View();
         }
 
@@ -54,7 +58,7 @@ namespace PracticaMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MascotaId,Nombre,TipoMascota")] Mascota mascota)
+        public async Task<IActionResult> Create([Bind("MascotaId,Nombre,TipoMascota,PersonaID")] Mascota mascota)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +66,7 @@ namespace PracticaMVC.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["PersonaID"] = new SelectList(_context.Persona, "PersonaID", "Nombres");
             return View(mascota);
         }
 
@@ -78,6 +83,8 @@ namespace PracticaMVC.Controllers
             {
                 return NotFound();
             }
+            ViewData["PersonaID"] = new SelectList(_context.Persona, "PersonaID", "Nombres");
+
             return View(mascota);
         }
 
@@ -86,7 +93,7 @@ namespace PracticaMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MascotaId,Nombre,TipoMascota")] Mascota mascota)
+        public async Task<IActionResult> Edit(int id, [Bind("MascotaId,Nombre,TipoMascota,PersonaID")] Mascota mascota)
         {
             if (id != mascota.MascotaId)
             {
@@ -113,6 +120,8 @@ namespace PracticaMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["PersonaID"] = new SelectList(_context.Persona, "PersonaID", "Nombres");
+
             return View(mascota);
         }
 

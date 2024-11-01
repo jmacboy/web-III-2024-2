@@ -24,6 +24,12 @@
                 <span asp-validation-for="TipoMascota" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="PersonaID" class="control-label"></label>
+                @Html.DropDownListFor(n => n.PersonaID, (IEnumerable<SelectListItem>
+                         )ViewData["PersonaID"], "Seleccione una persona",  new { @class = "form-select" })
+                <span asp-validation-for="PersonaID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
@@ -35,5 +41,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
