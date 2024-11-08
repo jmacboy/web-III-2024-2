@@ -138,3 +138,6 @@ GitHub.sublime-settings
 .history
 practicadjango2/djangoProject/.idea/
 proxyapp/node_modules/
+PracticaWebApi/PracticaWebApi/bin/
+PracticaWebApi/PracticaWebApi/obj/
+PracticaWebApi/PracticaWebApi/.vs/

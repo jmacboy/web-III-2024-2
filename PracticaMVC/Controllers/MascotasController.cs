@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PracticaMVC.Data;
 using PracticaMVC.Models;
+using PracticaMVC.ViewModels;
 
 namespace PracticaMVC.Controllers
 {
@@ -48,9 +49,10 @@ namespace PracticaMVC.Controllers
         // GET: Mascotas/Create
         public IActionResult Create()
         {
-            ViewData["PersonaID"] = new SelectList(_context.Persona, "PersonaID", "Nombres");
-            
-            return View();
+            MascotaViewModel mvm = new MascotaViewModel();
+            mvm.ListaPersonas = new SelectList(_context.Persona, "PersonaID", "Nombres");
+
+            return View(mvm);
         }
 
         // POST: Mascotas/Create
@@ -58,15 +60,22 @@ namespace PracticaMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MascotaId,Nombre,TipoMascota,PersonaID")] Mascota mascota)
+        public async Task<IActionResult> Create([Bind("Nombre,TipoMascota,PersonaId")] MascotaViewModel mascota)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(mascota);
+                Mascota m = new()
+                {
+                    Nombre = mascota.Nombre,
+                    TipoMascota = mascota.TipoMascota,
+                    PersonaID = mascota.PersonaId
+                };
+                _context.Add(m);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PersonaID"] = new SelectList(_context.Persona, "PersonaID", "Nombres");
+            mascota.ListaPersonas = new SelectList(_context.Persona, "PersonaID", "Nombres");
+
             return View(mascota);
         }
 
@@ -83,9 +92,16 @@ namespace PracticaMVC.Controllers
             {
                 return NotFound();
             }
-            ViewData["PersonaID"] = new SelectList(_context.Persona, "PersonaID", "Nombres");
+            MascotaViewModel mvm = new()
+            {
+                MascotaId = mascota.MascotaId,
+                Nombre = mascota.Nombre,
+                TipoMascota = mascota.TipoMascota,
+                PersonaId = mascota.PersonaID,
+                ListaPersonas = new SelectList(_context.Persona, "PersonaID", "Nombres")
+            };
 
-            return View(mascota);
+            return View(mvm);
         }
 
         // POST: Mascotas/Edit/5
@@ -93,7 +109,7 @@ namespace PracticaMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MascotaId,Nombre,TipoMascota,PersonaID")] Mascota mascota)
+        public async Task<IActionResult> Edit(int id, [Bind("MascotaId,Nombre,TipoMascota,PersonaId")] MascotaViewModel mascota)
         {
             if (id != mascota.MascotaId)
             {
@@ -104,12 +120,19 @@ namespace PracticaMVC.Controllers
             {
                 try
                 {
-                    _context.Update(mascota);
+                    Mascota m = new()
+                    {
+                        MascotaId = mascota.MascotaId ?? 0,
+                        Nombre = mascota.Nombre,
+                        TipoMascota = mascota.TipoMascota,
+                        PersonaID = mascota.PersonaId
+                    };
+                    _context.Update(m);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MascotaExists(mascota.MascotaId))
+                    if (!MascotaExists(mascota.MascotaId ?? 0))
                     {
                         return NotFound();
                     }
@@ -120,7 +143,7 @@ namespace PracticaMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PersonaID"] = new SelectList(_context.Persona, "PersonaID", "Nombres");
+            mascota.ListaPersonas = new SelectList(_context.Persona, "PersonaID", "Nombres");
 
             return View(mascota);
         }
