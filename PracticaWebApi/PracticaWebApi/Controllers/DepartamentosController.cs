@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ namespace PracticaWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class DepartamentosController : ControllerBase
     {
         private readonly PracticaWebApiContext _context;
@@ -23,9 +25,23 @@ namespace PracticaWebApi.Controllers
 
         // GET: api/Departamentos
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Departamento>>> GetDepartamento()
+        [AllowAnonymous]
+
+        public async Task<ActionResult<IEnumerable<object>>> GetDepartamento()
         {
-            return await _context.Departamento.ToListAsync();
+            return await _context.Departamento
+                .Select(x => new
+                {
+                    x.DepartamentoId,
+                    x.Nombre,
+                    Empleados = x.Empleados.Select(y => new
+                    {
+                        y.EmpleadoId,
+                        y.Nombres,
+                        y.Apellidos
+                    }).ToList()
+                })
+                .ToListAsync();
         }
 
         // GET: api/Departamentos/5

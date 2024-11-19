@@ -9,6 +9,7 @@
         public string Ciudad { get; set; }
         public DateTime FechaNacimiento { get; set; }
         public decimal Salario { get; set; }
+        
         public Departamento Departamento { get; set; }
     }
 }
