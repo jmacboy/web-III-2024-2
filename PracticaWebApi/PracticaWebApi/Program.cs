@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PracticaWebApi.Data;
+using PracticaWebApi.Services;
 using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,32 +13,26 @@ builder.Services.AddIdentityApiEndpoints<IdentityUser>()
     .AddEntityFrameworkStores<PracticaWebApiContext>();
 
 
-// Add services to the container.
-//var jwtSettings = builder.Configuration.GetSection("JwtSettings");
-//var secretKey = jwtSettings["SecretKey"];
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
-//}).AddJwtBearer(options =>
-//    {
-//        options.TokenValidationParameters = new TokenValidationParameters
-//        {
-//            ValidateIssuer = true,
-//            ValidateAudience = true,
-//            ValidateLifetime = true,
-//            ValidateIssuerSigningKey = true,
-//            ValidIssuer = jwtSettings["Issuer"],
-//            ValidAudience = jwtSettings["Audience"],
-//            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
-//        };
-//    });
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+            ClockSkew = TimeSpan.Zero
+        };
+    });
 
 builder.Services.AddDbContext<PracticaWebApiContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PracticaWebApiContext") ?? throw new InvalidOperationException("Connection string 'PracticaWebApiContext' not found.")));
 
-
+builder.Services.AddScoped<TokenService>();
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -88,10 +83,10 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
-app.UseAuthentication();
+//app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapIdentityApi<IdentityUser>();
+//app.MapIdentityApi<IdentityUser>();
 
 app.Run();

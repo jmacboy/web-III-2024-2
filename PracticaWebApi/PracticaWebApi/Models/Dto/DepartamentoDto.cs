@@ -1,4 +1,4 @@
-﻿namespace PracticaWebApi.Models
+﻿namespace PracticaWebApi.Models.Dto
 {
     public class DepartamentoDto
     {

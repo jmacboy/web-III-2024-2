@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using PracticaWebApi.Data;
 using PracticaWebApi.Migrations;
 using PracticaWebApi.Models;
+using PracticaWebApi.Models.Dto;
 
 namespace PracticaWebApi.Controllers
 {
